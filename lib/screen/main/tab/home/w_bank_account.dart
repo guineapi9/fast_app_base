@@ -30,7 +30,7 @@ class BankAccountWidget extends StatelessWidget {
           ).pSymmetric(h: 20, v: 10),
         ),
         RoundedContainer(
-          backgroundColor: context.appColors.ButtonBackground,
+          backgroundColor: context.appColors.buttonBackground,
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           radius: 10,
           child: "송금".text.bold.white.make(),

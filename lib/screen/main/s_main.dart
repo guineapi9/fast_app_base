@@ -1,5 +1,4 @@
 import 'package:after_layout/after_layout.dart';
-import 'package:fast_app_base/common/dart/extension/num_duration_extension.dart';
 import 'package:fast_app_base/screen/main/tab/tab_item.dart';
 import 'package:fast_app_base/screen/main/tab/tab_navigator.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +58,8 @@ class MainScreenState extends State<MainScreen>
         extendBody: extendBody, //bottomNavigationBar 아래 영역 까지 그림
         drawer: const MenuDrawer(),
         body: Container(
-          color: context.appColors.seedColor.getMaterialColorValues[200],
+          //color: context.appColors.seedColor.getMaterialColorValues[200],
+          //에메랄드 색 주석처리
           padding: EdgeInsets.only(
               bottom: extendBody ? 60 - bottomNavigationBarBorderRadius : 0),
           child: SafeArea(

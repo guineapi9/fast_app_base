@@ -15,6 +15,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //추가 입력
       body: CustomScrollView(
         slivers: [
           SliverAppBar(

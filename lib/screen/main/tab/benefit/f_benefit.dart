@@ -1,4 +1,5 @@
 import 'package:fast_app_base/common/common.dart';
+import 'package:fast_app_base/screen/main/s_main.dart';
 import 'package:fast_app_base/screen/main/tab/benefit/w_benefit_item.dart';
 import 'package:fast_app_base/screen/main/tab/benefit/w_point_button.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ class _BenefitFragmentState extends State<BenefitFragment> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      padding: EdgeInsets.only(bottom: MainScreenState.bottomNavigationHeight),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

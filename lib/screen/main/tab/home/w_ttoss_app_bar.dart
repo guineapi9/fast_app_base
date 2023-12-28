@@ -14,27 +14,42 @@ class TtossAppBar extends StatefulWidget {
 
 class _TtossAppBarState extends State<TtossAppBar> {
   bool _showRedDot = false;
+  int _tappingCount = 0; //파일 내에서만 사용할 것이므로 언더바 추가
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: TtossAppBar.appBarHeight,
-      color: context.appColors.AppBarBackground,
+      color: context.appColors.appBarBackground,
       child: Row(
         children: [
           width10,
-          Image.asset(
-            "$basePath/icon/toss.png",
-            height: 30,
+          AnimatedContainer(
+            duration: 1000.ms,
+            curve: Curves.decelerate,
+            height: _tappingCount > 2 ? 60 : 30,
+            child: Image.asset(
+              "$basePath/icon/toss.png",
+              //height: 30, //이미지 상단에 Container가 존재한다면 이미지 내의 크기설정이 먹히지 않음
+            ),
           ),
           emptyExpanded,
-          Image.asset(
-            "$basePath/icon/map_point.png",
-            height: 30,
+          //맵 버튼
+          Tap(
+            onTap: () {
+              setState(() {
+                _tappingCount++;
+              });
+            },
+            child: Image.asset(
+              "$basePath/icon/map_point.png",
+              height: 30,
+            ),
           ),
           width10,
+          //종 모양
           Tap(
-            onTap: (){
+            onTap: () {
               Nav.push(NotificationScreen());
             },
             child: Stack(
@@ -43,20 +58,25 @@ class _TtossAppBarState extends State<TtossAppBar> {
                   "$basePath/icon/notification.png",
                   height: 30,
                 ),
-                if(_showRedDot)Positioned.fill(
-                    child: Align(
-                  alignment: Alignment.topRight,
-                  child: Container(
-                    width: 6,
-                    height: 6,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.red,
-                    ),
-                  ),
-                ))
+                if (_showRedDot)
+                  Positioned.fill(
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: Container(
+                          width: 6,
+                          height: 6,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ))
               ],
-            ),
+            )
+                .animate(onComplete: (controller) => controller.repeat())
+                .shake(duration: 2000.ms, hz: 3)
+                .then()
+                .fadeOut(duration: 1000.ms),
           ),
         ],
       ),

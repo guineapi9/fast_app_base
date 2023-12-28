@@ -1,5 +1,4 @@
 import 'package:fast_app_base/common/common.dart';
-import 'package:fast_app_base/common/dart/extension/num_duration_extension.dart';
 import 'package:fast_app_base/common/widget/round_button_theme.dart';
 import 'package:fast_app_base/common/widget/w_round_button.dart';
 import 'package:fast_app_base/common/widget/w_rounded_container.dart';
@@ -9,6 +8,9 @@ import 'package:fast_app_base/screen/main/tab/home/bank_accounts_dummy.dart';
 import 'package:fast_app_base/screen/main/tab/home/w_bank_account.dart';
 import 'package:fast_app_base/screen/main/tab/home/w_ttoss_app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:live_background/live_background.dart';
+import 'package:live_background/widget/live_background_widget.dart';
 
 import '../../../../common/widget/scaffold/w_big_button.dart';
 import '../../../dialog/d_color_bottom.dart';
@@ -25,13 +27,20 @@ class HomeFragment extends StatelessWidget {
       color: Colors.black,
       child: Stack(
         children: [
+          const LiveBackgroundWidget(
+            palette: Palette(colors: [Colors.green, Colors.red]),
+            velocityX: 1,
+            particleMaxSize: 20,
+          ),
           RefreshIndicator(
             edgeOffset: TtossAppBar.appBarHeight,
-            onRefresh: () async{
+            onRefresh: () async {
               await sleepAsync(500.ms);
             },
             child: SingleChildScrollView(
-              padding: EdgeInsets.only(top: TtossAppBar.appBarHeight, bottom: MainScreenState.bottomNavigationHeight),
+              padding: const EdgeInsets.only(
+                  top: TtossAppBar.appBarHeight,
+                  bottom: MainScreenState.bottomNavigationHeight),
               child: Column(
                 children: [
                   BigButton(
@@ -41,7 +50,8 @@ class HomeFragment extends StatelessWidget {
                     },
                   ),
                   height10,
-                  RoundedContainer(child: Column(
+                  RoundedContainer(
+                      child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       "자산".text.bold.white.make(),
@@ -51,7 +61,7 @@ class HomeFragment extends StatelessWidget {
                   ))
                 ],
               ).pSymmetric(h: 20),
-            ),
+            ).animate().slideY(duration: 3000.ms).fadeIn(),
           ),
           const TtossAppBar(),
         ],
