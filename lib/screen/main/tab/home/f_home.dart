@@ -5,10 +5,13 @@ import 'package:fast_app_base/common/widget/w_rounded_container.dart';
 import 'package:fast_app_base/screen/dialog/d_message.dart';
 import 'package:fast_app_base/screen/main/s_main.dart';
 import 'package:fast_app_base/screen/main/tab/home/bank_accounts_dummy.dart';
+import 'package:fast_app_base/screen/main/tab/home/s_number.dart';
 import 'package:fast_app_base/screen/main/tab/home/w_bank_account.dart';
+import 'package:fast_app_base/screen/main/tab/home/w_rive_like_button.dart';
 import 'package:fast_app_base/screen/main/tab/home/w_ttoss_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:get/get.dart';
 import 'package:live_background/live_background.dart';
 import 'package:live_background/widget/live_background_widget.dart';
 
@@ -16,10 +19,19 @@ import '../../../../common/widget/scaffold/w_big_button.dart';
 import '../../../dialog/d_color_bottom.dart';
 import '../../../dialog/d_confirm.dart';
 
-class HomeFragment extends StatelessWidget {
+class HomeFragment extends StatefulWidget {
   const HomeFragment({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<HomeFragment> createState() => _HomeFragmentState();
+}
+
+class _HomeFragmentState extends State<HomeFragment> {
+  late final stream = countStream(5).asBroadcastStream();
+
+  bool isLike = false;
 
   @override
   Widget build(BuildContext context) {
@@ -33,40 +45,82 @@ class HomeFragment extends StatelessWidget {
             particleMaxSize: 20,
           ),
           RefreshIndicator(
-            edgeOffset: TtossAppBar.appBarHeight,
-            onRefresh: () async {
-              await sleepAsync(500.ms);
-            },
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.only(
-                  top: TtossAppBar.appBarHeight,
-                  bottom: MainScreenState.bottomNavigationHeight),
-              child: Column(
-                children: [
-                  BigButton(
-                    "토스뱅크",
-                    onTap: () {
-                      context.showSnackbar("토스뱅크를 눌렀어요.");
-                    },
-                  ),
-                  height10,
-                  RoundedContainer(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      "자산".text.bold.white.make(),
-                      height5,
-                      ...bankAccounts.map((e) => BankAccountWidget(e)).toList(),
-                    ],
-                  ))
-                ],
-              ).pSymmetric(h: 20),
-            ).animate().slideY(duration: 3000.ms).fadeIn(),
+              edgeOffset: TtossAppBar.appBarHeight,
+              onRefresh: () async {
+                await sleepAsync(500.ms);
+              },
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.only(
+                    top: TtossAppBar.appBarHeight,
+                    bottom: MainScreenState.bottomNavigationHeight),
+                child: Column(
+                  children: [
+                    StreamBuilder(builder: (context, snapshot){
+                      final count = snapshot.data;
+                      if (count==null){
+                        return const CircularProgressIndicator(); //동그란 로딩
+                      } else {
+                        return count.text.size(30).bold.make();
+                      }
+                    }, stream: countStream(5),),
+                    StreamBuilder(builder: (context, snapshot){
+                      final count = snapshot.data;
+                      if (count==null){
+                        return const CircularProgressIndicator(); //동그란 로딩
+                      } else {
+                        return count.text.size(30).bold.make();
+                      }
+                    }, stream: stream,),
+                    SizedBox(
+                      width: 250,
+                      height: 250,
+                      child: RiveLikeButton(isLike, onTapLike: (isLike) {
+                        setState(() {
+                          this.isLike = isLike;
+                          //this의 isLike는 HomeFragment에서 선언한 isLike이고, 우측의 isLike은 onTapLike에서 선언한 isLike.
+                        });
+                      },),
+                    ),
+                    BigButton(
+                      "토스뱅크",
+                      onTap: () async {
+                        print('start');
+                        // Push가 된 후 끝날때까지 기다림, 끝나면 값을 가져와서 result에 저장할 수 있음.
+                        final result = await Nav.push(NumberScreen());
+                        print(result);
+                        print('end');
+                      },
+                    ),
+                    height10,
+                    RoundedContainer(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            "자산".text.bold.white.make(),
+                            height5,
+                            ...bankAccounts
+                                .map((e) => BankAccountWidget(e))
+                                .toList(),
+                          ],
+                        ))
+                  ],
+                ).pSymmetric(h: 20),
+              ) //.animate().slideY(duration: 3000.ms).fadeIn(),
           ),
           const TtossAppBar(),
         ],
       ),
     );
+  }
+
+  Stream<int> countStream(int max) async* {
+    await sleepAsync(2.seconds);
+    for (int i = 1; i <= max; i++) {
+      //print('before yield');
+      yield i;
+      //print('after yield');
+      await sleepAsync(1.seconds);
+    }
   }
 
   void showSnackbar(BuildContext context) {

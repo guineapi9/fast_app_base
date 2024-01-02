@@ -17,8 +17,11 @@ class SettingScreen extends StatefulWidget {
   State<SettingScreen> createState() => _SettingScreenState();
 }
 
-class _SettingScreenState extends State<SettingScreen> {
+class _SettingScreenState extends State<SettingScreen> with SingleTickerProviderStateMixin{
+  //AinmationController가 여러개면 TickerProviderStateMixin을 사용.
   final scrollController = ScrollController();
+  late final AnimationController animationController = AnimationController(vsync: this, duration: 2000.ms);
+  //Animation이 수행되는 시간, 즉 duration을 지정해야 한다.
 
 
   /*
@@ -60,6 +63,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 () => Slider(
                   value: Prefs.sliderPosition.get(),
                   onChanged: (value) {
+                    animationController.animateTo(value, duration: 0.ms); // 슬라이더의 움직임에 따라 animation이 실행
                     Prefs.sliderPosition.set(value);
                   },
                 ),
@@ -98,19 +102,19 @@ class _SettingScreenState extends State<SettingScreen> {
                 Nav.push(OpensourceScreen());
               }),
 
-              BigButton("오픈소스 화면(추가1)", onTap: () async {
-                Nav.push(OpensourceScreen());
+              BigButton("Animation Forward", onTap: () async {
+                animationController.forward();
               }),
 
-              BigButton("오픈소스 화면(추가2)", onTap: () async {
-                Nav.push(OpensourceScreen());
+              BigButton("Animation reverse", onTap: () async {
+                animationController.reverse();
               }),
 
-              BigButton("오픈소스 화면(추가3)", onTap: () async {
-                Nav.push(OpensourceScreen());
+              BigButton("Animation repeat", onTap: () async {
+                animationController.repeat();
               }),
-              BigButton("오픈소스 화면(추가4)", onTap: () async {
-                Nav.push(OpensourceScreen());
+              BigButton("Animation reset", onTap: () async {
+                animationController.reset();
               }),
               BigButton("오픈소스 화면(추가5)", onTap: () async {
                 Nav.push(OpensourceScreen());
@@ -137,7 +141,7 @@ class _SettingScreenState extends State<SettingScreen> {
           ),
 
           //Appbar
-          AnimatedAppBar("설정", controller: scrollController,)
+          AnimatedAppBar("설정", scrollController: scrollController, animationController: animationController,)
         ],
       ),
     );
