@@ -2,4 +2,4 @@
 //export 'theme/shadows/abs_theme_shadows.dart';
 
 const basePath = 'assets/image';
-const baseRivePath = 'assets/image/rive';
+const baseRivePath = 'assets/rive';

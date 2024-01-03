@@ -18,7 +18,7 @@ void main() {
 
   /// 2. streamController
 
-    // 스트림 컨트롤러를 선언
+  // 스트림 컨트롤러를 선언
   // final controller = StreamController<int>();
   // final stream = controller.stream;
   //
@@ -68,10 +68,9 @@ void main() {
 //
 // } //main 함수의 끝
 
-Iterable<int> countIterable(int max) sync* {
-  yield* [];
-}
-
+  Iterable<int> countIterable(int max) sync* {
+    yield* [];
+  }
 
 
   /// 에러 발생 있는 버전
@@ -96,12 +95,13 @@ Iterable<int> countIterable(int max) sync* {
   // }
   // }
 
-/// 에러 발생 없는 버전
-Stream<int> countStream(int max) async* {
-  for (int i = 1; i <= max; i++) {
+  /// 에러 발생 없는 버전
+  Stream<int> countStream(int max) async* {
+    for (int i = 1; i <= max; i++) {
       //print('before yield');
       yield i;
       //print('after yield');
-    await sleepAsync(1.seconds);
+      await sleepAsync(1.seconds);
+    }
   }
 }

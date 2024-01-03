@@ -53,7 +53,7 @@ class _RiveLikeButtonState extends State<RiveLikeButton> {
         //좋아요가 눌러져 있으면 끄도록 반대의 값을 준다.
       },
       child: RiveAnimation.asset(
-        "$baseRivePath/light_like.riv",
+        "$baseRivePath/light_like2.riv",
         stateMachines: ['State Machine 1'],
         onInit: (Artboard art) {
           controller =
